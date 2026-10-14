@@ -1,0 +1,37 @@
+{
+  "$schema": "https://raw.githubusercontent.com/DanWahlin/agent-buddy/main/docs/schemas/plugin-manifest-v1.json",
+  "manifestVersion": 1,
+  "id": "deepgram-speech",
+  "name": "Deepgram Speech",
+  "version": "0.1.0",
+  "description": "Speaks Agent Buddy's lines with Deepgram Flux text-to-speech voices.",
+  "publisher": "Deepgram",
+  "license": "MIT",
+  "api": "1.0",
+  "runtime": "node",
+  "main": "main.mjs",
+  "permissions": ["speech.provide"],
+  "network": ["api.deepgram.com"],
+  "contributes": {
+    "speechProviders": [
+      {"id": "flux", "name": "Deepgram Flux", "description": "Sends each spoken line to Deepgram."}
+    ],
+    "settings": [
+      {"key": "apiKey", "type": "secret", "title": "Deepgram API key", "required": true,
+       "pattern": "^[\\x21-\\x7e]{20,128}$",
+       "help": {"text": "Get a free Deepgram API key",
+                "url": "https://console.deepgram.com/signup?product=tts&jump=keys&utm_source=github&utm_medium=referral&utm_campaign=danwahlin-agent-buddy&utm_content=settings-speech"}},
+      {"key": "voice", "type": "select", "title": "Voice", "default": "flux-haley-en",
+       "options": [
+         {"value": "flux-haley-en", "label": "Haley"},
+         {"value": "flux-cole-en", "label": "Cole"},
+         {"value": "flux-heather-en", "label": "Heather"},
+         {"value": "flux-priya-en", "label": "Priya"},
+         {"value": "flux-jack-en", "label": "Jack"},
+         {"value": "flux-bruce-en", "label": "Bruce"},
+         {"value": "flux-rufus-en", "label": "Rufus"},
+         {"value": "flux-drew-en", "label": "Drew"}
+       ]}
+    ]
+  }
+}

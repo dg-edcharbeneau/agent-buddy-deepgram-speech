@@ -1,0 +1,34 @@
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      # The Agent Buddy repository and branch whose plugin rules this plugin is checked against.
+      AGENT_BUDDY_REPO: DanWahlin/agent-buddy
+      AGENT_BUDDY_REF: main
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Unit and protocol tests
+        run: npm test
+      - name: Check out Agent Buddy
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.AGENT_BUDDY_REPO }}
+          ref: ${{ env.AGENT_BUDDY_REF }}
+          path: agent-buddy
+          persist-credentials: false
+      - name: Agent Buddy plugin conformance checks
+        run: |
+          npm ci --prefix agent-buddy/daemon
+          npm run build --prefix agent-buddy/daemon
+          node agent-buddy/tools/plugin-check.mjs .
